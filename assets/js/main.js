@@ -5,8 +5,9 @@ let playingType = null; // collection, video, or clip
 var hideDebug = true;
 
 let queue = [];
-var soundFadeIn = -1;
-var soundFadeOut = -1;
+var soundFadeIn = null;
+var soundFadeOut = null;
+var clipSoundFadeOut = null;
 
 // collection IDs to play through
 var collections = ["RvuGzpeNeRWEQQ", "506ho6ONeRWxZg"];
@@ -45,27 +46,49 @@ var collectionInput = document.getElementById("collection");
 var video = document.getElementById("clip");
 
 function soundFadeInFunc() {
-	var beforeFadeVol = player.getVolume();
-	var soundFadeIn = setInterval(function() {
-		console.log("VOD Player volume: " + player.getVolume());
-		if (player.getVolume() < maxVolume) {
-			player.setVolume(player.getVolume() + (maxVolume / 20));
-		} else {
-			clearInterval(soundFadeIn);
-		}
-	}, 100);
+	if (soundFadeIn === null) {
+		var beforeFadeVol = player.getVolume();
+		soundFadeIn = setInterval(function() {
+			console.log("VOD Player volume: " + player.getVolume());
+			if (player.getVolume() < maxVolume) {
+				player.setVolume(player.getVolume() + (maxVolume / 20));
+			} else {
+				clearInterval(soundFadeIn);
+				soundFadeIn = null;
+			}
+		}, 100);
+	}
 }
 
 function soundFadeOutFunc() {
-	var beforeFadeVol = player.getVolume();
-	var soundFadeOut = setInterval(function() {
-		console.log("VOD Player volume: " + player.getVolume());
-		if (player.getVolume() > 0) {
-			player.setVolume(player.getVolume() - (beforeFadeVol / 20));
-		} else {
-			clearInterval(soundFadeOut);
-		}
-	}, 100);
+	if (soundFadeOut === null) {
+		var beforeFadeVol = player.getVolume();
+		soundFadeOut = setInterval(function() {
+			console.log("VOD Player volume: " + player.getVolume());
+			if (player.getVolume() > 0) {
+				player.setVolume(player.getVolume() - (beforeFadeVol / 20));
+			} else {
+				clearInterval(soundFadeOut);
+				soundFadeOut = null;
+			}
+		}, 100);
+	}
+}
+
+function clipSoundFadeOutFunc() {
+	if (clipSoundFadeOut === null) {
+		console.log("cli sound fade out");
+		var beforeFadeVol = video.volume;
+		clipSoundFadeOut = setInterval(function() {
+			console.log("Clip player volume: " + video.volume);
+				if (video.volume > 0) {
+						video.volume = video.volume - (beforeFadeVol / 20);
+				} else {
+						clearInterval(clipSoundFadeOut);
+						clipSoundFadeOut = null;
+				}
+		}, 100);
+	}
 }
 
 function next() {
@@ -79,7 +102,6 @@ function next() {
 							console.log(queue[queueIndex].type);
           switch (queue[queueIndex].type) {
               case "collection":
-							queueIndex += 1;
 							player = new Twitch.Player("playerDiv", options);
                   player.setCollection(queue[queueIndex].id);
                   playingType = "collection";
@@ -112,7 +134,6 @@ function next() {
 									});
                 break;
             case "video":
-						queueIndex += 1;
 						player = new Twitch.Player("playerDiv", options);
 						console.log(playingType);
 						console.log(queue[queueIndex].type);
@@ -174,16 +195,20 @@ function next() {
                             video.play();
                             playingType = "clip";
                             var beforeFadeVol = video.volume;
-                            var soundFadeIn = setInterval(function() {
-                                if (video.volume < maxVolume) {
-                                    video.volume = (video.volume + (maxVolume / 20));
-                                } else {
-                                    clearInterval(soundFadeIn);
-                                }
-                            }, 100);
+														if (soundFadeIn === null) {
+	                            soundFadeIn = setInterval(function() {
+	                                if (video.volume < maxVolume) {
+	                                    video.volume = (video.volume + (maxVolume / 20));
+	                                } else {
+	                                    clearInterval(soundFadeIn);
+																			soundFadeIn = null;
+	                                }
+	                            }, 100);
+														}
                         };
                         video.onended = function() {
 													document.getElementById("clipDiv").removeChild(document.getElementById("clipDiv").childNodes[1]);
+													console.log("video player removed");
 									        playingType = null;
 													console.log("ended");
 													queueIndex += 1;
@@ -250,16 +275,8 @@ setInterval(function() {
 				clipDiv.style.opacity = 0;
 				playerDiv.style.opacity = 0;
 		}
-		console.log("Clip player volume: " + video.volume);
 		 if (video.currentTime.toFixed(0) == video.duration.toFixed(0) - 2) {
-				var beforeFadeVol = video.volume.toFixed(2);
-				var soundFadeOut = setInterval(function() {
-						if (playingType == "clip" && video.volume > 0) {
-								video.volume = video.volume - (beforeFadeVol / 20);
-						} else {
-								clearInterval(soundFadeOut);
-						}
-				}, 100);
+				clipSoundFadeOutFunc();
 		}
  }
 }, 100);
