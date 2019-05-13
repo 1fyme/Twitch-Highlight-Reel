@@ -335,11 +335,9 @@ socket.on("reload", function() {
 socket.on("queue", function(queueArr) {
     for (let i = 0; i <= queue.length; i++) {
         queue.pop();
-
     }
     for (let i = 0; i < queueArr.length; i++) {
         queue[i] = queueArr[i];
-
     }
 		if (queue.length === 0) {
 			queueIndex = 0;
