@@ -345,6 +345,9 @@ socket.on("queue", function(queueArr) {
     if (playingType === null) {
         next();
     }
+		if (queueIndex >= queue.length) {
+			queueIndex = 0;
+		}
 });
 
 // TODO: Change to accept other collections, videos, and
