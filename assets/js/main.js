@@ -203,9 +203,6 @@ function next() {
                 break;
         }
         queueIndex += 1;
-			} else if (queueIndex >= queue.length) {
-				queueIndex = 0;
-				next();
 			}
         }
   // }, 2000);
