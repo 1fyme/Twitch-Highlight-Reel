@@ -6,7 +6,7 @@ body {
 }
 .debug {
 }
-#progress {
+#playerProgress, #clipProgress {
   opacity: 0.5;
   box-shadow: 0px 0px 5px #101010;
   transition: all 500ms ease-out;
@@ -28,7 +28,7 @@ body {
   transition: 1s opacity ease;
   float: left;
 }
-video#clip {
+#clipDiv {
     position: absolute;
     left: 0;
     opacity: 0;

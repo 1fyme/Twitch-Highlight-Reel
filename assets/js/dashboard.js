@@ -286,7 +286,7 @@
             queue[i] = queueArr[i];
         }
         updateQueueTable();
-        
+
     });
 
     // Player Controls
