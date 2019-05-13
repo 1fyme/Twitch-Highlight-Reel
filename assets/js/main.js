@@ -111,11 +111,15 @@ function next() {
 									  soundFadeInFunc();
 									});
 									player.addEventListener(Twitch.Player.ENDED, function() {
-										document.getElementById("playerDiv").removeChild(document.getElementById("playerDiv").childNodes[1]);
-										playingType = null;
-										queueIndex += 1;
-										console.log("calling next!");
-										next();
+										setTimeout(function() {
+											if (player.getEnded() == true) {
+												document.getElementById("playerDiv").removeChild(document.getElementById("playerDiv").childNodes[1]);
+												playingType = null;
+												queueIndex += 1;
+												console.log("calling next!");
+												next();
+											}
+										}, 3000);
 									});
 
 									player.addEventListener(Twitch.Player.PLAY, function() {
