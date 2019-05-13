@@ -71,7 +71,7 @@ function soundFadeOutFunc() {
 function next() {
     iDiv.innerHTML = "Playback Status: Ended";
     socket.emit("Twitch.Player.ENDED");
-    setTimeout(function() {
+    // setTimeout(function() {
         console.log("continuing...");
         if (playingType == null) {
             if (queueIndex < queue.length) {
@@ -208,7 +208,7 @@ function next() {
 				next();
 			}
         }
-  }, 2000);
+  // }, 2000);
 }
 
 if (hideDebug) {
