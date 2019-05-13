@@ -75,8 +75,11 @@ function next() {
         console.log("continuing...");
         if (playingType == null) {
             if (queueIndex < queue.length) {
+							console.log(queueIndex);
+							console.log(queue[queueIndex].type);
           switch (queue[queueIndex].type) {
               case "collection":
+							queueIndex += 1;
 							player = new Twitch.Player("playerDiv", options);
                   player.setCollection(queue[queueIndex].id);
                   playingType = "collection";
@@ -87,8 +90,9 @@ function next() {
 									});
 									player.addEventListener(Twitch.Player.ENDED, function() {
 										document.getElementById("playerDiv").removeChild(document.getElementById("playerDiv").childNodes[1]);
-										console.log("calling next");
 										playingType = null;
+										queueIndex += 1;
+										console.log("calling next!");
 										next();
 									});
 
@@ -108,6 +112,7 @@ function next() {
 									});
                 break;
             case "video":
+						queueIndex += 1;
 						player = new Twitch.Player("playerDiv", options);
 						console.log(playingType);
 						console.log(queue[queueIndex].type);
@@ -121,9 +126,11 @@ function next() {
 								});
 								player.addEventListener(Twitch.Player.ENDED, function() {
 									document.getElementById("playerDiv").removeChild(document.getElementById("playerDiv").childNodes[1]);
-									console.log("calling next");
 									playingType = null;
+									queueIndex += 1;
+									console.log("calling next!");
 									next();
+
 								});
 
 								player.addEventListener(Twitch.Player.PLAY, function() {
@@ -147,6 +154,7 @@ function next() {
                 console.log("clip");
                 const Http = new XMLHttpRequest();
                 const url='https://clips.twitch.tv/api/v1/clips/' + queue[queueIndex].id + '/status';
+								console.log("INCREMENT!" + queueIndex);
                 Http.open("GET", url);
                 Http.send();
                 Http.onreadystatechange=(e)=>{
@@ -178,6 +186,8 @@ function next() {
 													document.getElementById("clipDiv").removeChild(document.getElementById("clipDiv").childNodes[1]);
 									        playingType = null;
 													console.log("ended");
+													queueIndex += 1;
+													console.log("calling next!");
 													next();
 												};
 												video.onplay = function() {
@@ -202,7 +212,6 @@ function next() {
                 }
                 break;
         }
-        queueIndex += 1;
 			}
         }
   // }, 2000);
@@ -240,7 +249,6 @@ setInterval(function() {
 		 if (video.currentTime.toFixed(0) == video.duration.toFixed(0) - 1) {
 				clipDiv.style.opacity = 0;
 				playerDiv.style.opacity = 0;
-				playingType = null;
 		}
 		console.log("Clip player volume: " + video.volume);
 		 if (video.currentTime.toFixed(0) == video.duration.toFixed(0) - 2) {
@@ -340,7 +348,7 @@ socket.on("queue", function(queueArr) {
         queue[i] = queueArr[i];
     }
 		if (queue.length === 0) {
-			queueIndex = 0;
+			x = 0;
 		}
     if (playingType === null) {
         next();
