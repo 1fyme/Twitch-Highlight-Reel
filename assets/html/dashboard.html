@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-blue.min.css" />
+		<link rel="stylesheet" href="dashboard.css" />
+		<title>Highlight Reel Dashboard</title>
+	</head>
+	<body>
+		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+			<header class="mdl-layout__header">
+				<div class="mdl-layout__header-row">
+					<!-- Title -->
+					<span class="mdl-layout-title">Highlight Reel Dashboard</span>
+					<!-- Add spacer, to align navigation to the right -->
+					<div class="mdl-layout-spacer"></div>
+				</div>
+			</header>
+			<div class="mdl-layout__drawer">
+				<span class="mdl-layout-title">Quick Links</span>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="/" target="_blank">
+						Highlight Reel Page
+					</a>
+					<a class="mdl-navigation__link" href="https://www.twitch.tv/foxotic/videos" target="_blank">
+						Videos Page
+					</a>
+					<a class="mdl-navigation__link" href="https://www.twitch.tv/foxotic/clips?filter=clips&range=7d" target="_blank">
+						Clips Page
+					</a>
+					<a class="mdl-navigation__link" href="https://www.twitch.tv/foxotic/videos?filter=collections" target="_blank">
+						Collections Page
+					</a>
+					<a class="mdl-navigation__link" id="reload-overlays">
+						Reload Highlight Reel Page
+					</a>
+				</nav>
+				<div style="position: absolute; bottom: 10px; left: 10px">
+					Highlight Reel
+					<br>
+					Version 0.0.1
+				</div>
+			</div>
+			<main class="mdl-layout__content">
+				<div class="page-content">
+					<div class="mdl-grid">
+						<div class="mdl-cell mdl-cell--6-col mdl-card mdl-shadow--2dp">
+							<div class="mdl-card__title">
+								<h2 class="mdl-card__title-text">Queue</h2>
+							</div>
+							<div class="mdl-cell mdl-cell--6-col">
+								<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+									<thead>
+										<tr>
+											<th class="mdl-data-table__cell--non-numeric">
+												<input type="checkbox" id="heading">
+											</th>
+											<th class="mdl-data-table__cell--non-numeric">Number</th>
+											<th class="mdl-data-table__cell--non-numeric">Type</th>
+											<th class="mdl-data-table__cell--non-numeric">ID</th>
+										</tr>
+									</thead>
+									<tbody id="queue">
+									</tbody>
+								</table>
+								<br>
+								<button id="removeItem" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Remove</button>
+								<button id="moveItemUp" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Move Up</button>
+								<button id="moveItemDown" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" disabled>Move Down</button>
+								<br>
+								<br>
+								<form id="collectionIDForm" action="">
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<input class="mdl-textfield__input" type="text" id="collectionID">
+										<label class="mdl-textfield__label" for="collectionID">Collection ID</label>
+									</div>
+									<button id="addCollection" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add Collection</button>
+								</form>
+								<form id="videoIDForm" action="">
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<input class="mdl-textfield__input" type="text" id="videoID">
+										<label class="mdl-textfield__label" for="videoID">Video ID</label>
+									</div>
+									<button id="addVideo" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add Video ID</button>
+								</form>
+								<form id="clipIDForm" action="">
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<input class="mdl-textfield__input" type="text" id="clipID">
+										<label class="mdl-textfield__label" for="clipID">Clip ID</label>
+									</div>
+									<button id="addClip" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add Clip ID</button>
+								</form>
+							</div>
+						</div>
+						<div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--2dp">
+							<div class="mdl-card__title">
+								<h2 class="mdl-card__title-text">Controls</h2>
+							</div>
+							<div class="mdl-card__supporting-text">
+								<div class="controlTitle" style="font-weight: bold">Player Volume</div>
+								<div id="volumeValue" style="text-align: right; font-weight: bold">10%</div>
+								<input id="volumeSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="25" tabindex="0" />
+								<br>
+								<button id="changeVolumeButton" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+									Change Volume
+								</button>
+								<br>
+								<br>
+								<div>
+									<button id="play" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+										Play
+									</button>
+									<button id="pause" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+										Pause
+									</button>
+								</div>
+								<br>
+								<br>
+								<button id="goBack5Sec" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+									Go Back 5 Seconds
+								</button>
+								<br>
+								<br>
+								<button id="goToEndOfVid" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+									Go to End of Video
+								</button>
+								<br>
+								<br>
+								<br>
+								<button id="toggleProgressBar" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+									Show/Hide Progress Bar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--2dp">
+					<div class="mdl-card__title">
+						<h2 class="mdl-card__title-text">Other Controls</h2>
+					</div>
+					<div class="mdl-card__supporting-text">
+						<button id="reload-overlays" class="mdl-button mdl-js-button mdl-button--raised mdl-button--raised mdl-js-ripple-effect">
+							Reload Highlight Reel Page
+						</button>
+						<div class="mdl-card__supporting-text">
+							Reloading the Highlight Reel Page will automatically play the
+							currently selected playlist.
+						</div>
+					</div>
+					<div class="mdl-card__supporting-text">
+						<button id="hide-show-overlay" class="mdl-button mdl-js-button mdl-button--raised mdl-button--raised mdl-js-ripple-effect" disabled>
+							Hide/Show Hightlight Reel Page
+						</button>
+						<div class="mdl-card__supporting-text">
+							Hiding the Highlight Reel Page may not mute or pause any currently-playing video.
+						</div>
+					</div>
+				</div>
+				<div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+					<div class="mdl-snackbar__text"></div>
+					<button class="mdl-snackbar__action" type="button"></button>
+				</div>
+			</main>
+		</div>
+		<script src="https://storage.googleapis.com/code.getmdl.io/1.3.0/material.min.js"></script>
+		<script src="jquery-3.3.1.min.js"></script>
+		<script src="socket.io-2.2.0.js"></script>
+		<script src="dashboard.js"></script>
+	</body>
+</html>

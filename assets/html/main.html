@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<link href="main.css" rel="stylesheet" type="text/css" />
+	</head>
+  <body>
+		<script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+    <div id="playerDiv"></div>
+    <div id="progress"></div>
+    <div id="debug">
+      <div id="b"></div>
+      <div id="c"></div>
+      <div id="d"></div>
+      <div id="e"></div>
+      <div id="f"></div>
+      <div id="g"></div>
+      <div id="h"></div>
+      <div id="i"></div>
+      <br>
+      <button id="jump">Jump to 5 seconds before transition</button>
+      <br>
+      <button onclick="player.play()">Play</button>
+      <button onclick="player.pause()">Pause</button>
+      <br>
+      <br>
+      <div>
+        Collection ID:
+        <input id="collection">
+        <button id="changeCollection">Change Collection</button>
+      </div>
+    </div>
+		<script src="socket.io-2.2.0.js"></script>
+		<script src="jquery-3.3.1.min.js"></script>
+		<script src="main.js"></script>
+  </body>
+</html>
