@@ -47,6 +47,7 @@ var video = document.getElementById("clip");
 function soundFadeInFunc() {
 	var beforeFadeVol = player.getVolume();
 	var soundFadeIn = setInterval(function() {
+		console.log("VOD Player volume: " + player.getVolume());
 		if (player.getVolume() < maxVolume) {
 			player.setVolume(player.getVolume() + (maxVolume / 20));
 		} else {
@@ -58,6 +59,7 @@ function soundFadeInFunc() {
 function soundFadeOutFunc() {
 	var beforeFadeVol = player.getVolume();
 	var soundFadeOut = setInterval(function() {
+		console.log("VOD Player volume: " + player.getVolume());
 		if (player.getVolume() > 0) {
 			player.setVolume(player.getVolume() - (beforeFadeVol / 20));
 		} else {
@@ -84,6 +86,7 @@ function next() {
 									  soundFadeInFunc();
 									});
 									player.addEventListener(Twitch.Player.ENDED, function() {
+										document.getElementById("playerDiv").removeChild(document.getElementById("playerDiv").childNodes[1]);
 										console.log("calling next");
 										playingType = null;
 										next();
@@ -117,6 +120,7 @@ function next() {
 								  soundFadeInFunc();
 								});
 								player.addEventListener(Twitch.Player.ENDED, function() {
+									document.getElementById("playerDiv").removeChild(document.getElementById("playerDiv").childNodes[1]);
 									console.log("calling next");
 									playingType = null;
 									next();
@@ -199,7 +203,10 @@ function next() {
                 break;
         }
         queueIndex += 1;
-        }
+			} else if (queueIndex >= queue.length) {
+				queueIndex = 0;
+				next();
+			}
         }
   }, 2000);
 }
@@ -227,10 +234,6 @@ setInterval(function() {
 	 if (player.getCurrentTime().toFixed(0) == player.getDuration().toFixed(0) - 1) {
 		 clipDiv.style.opacity = 0;
 	   playerDiv.style.opacity = 0;
-		 setTimeout(function() {
-			 document.getElementById("playerDiv").removeChild(document.getElementById("playerDiv").childNodes[1]);
-		 }, 900);
-		 playingType = null;
 	 }
 	 if (player.getCurrentTime().toFixed(0) == player.getDuration().toFixed(0) - 2) {
 		 soundFadeOutFunc();
@@ -242,8 +245,9 @@ setInterval(function() {
 				playerDiv.style.opacity = 0;
 				playingType = null;
 		}
+		console.log("Clip player volume: " + video.volume);
 		 if (video.currentTime.toFixed(0) == video.duration.toFixed(0) - 2) {
-				var beforeFadeVol = video.volume;
+				var beforeFadeVol = video.volume.toFixed(2);
 				var soundFadeOut = setInterval(function() {
 						if (playingType == "clip" && video.volume > 0) {
 								video.volume = video.volume - (beforeFadeVol / 20);
